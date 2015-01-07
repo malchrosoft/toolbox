@@ -5,6 +5,7 @@
  */
 package com.malchrosoft.object;
 
+import com.malchrosoft.debug.Log;
 import com.malchrosoft.utils.list.KeyValue;
 import com.malchrosoft.utils.list.KeyValueList;
 import java.util.*;
@@ -148,7 +149,7 @@ public class Person
 		{
 			// TODO to externalize
 		}
-		
+
 		public static enum IdentityElement
 		{
 			NAME, FORENAME, SEX
@@ -174,13 +175,13 @@ public class Person
 		 * Returns the person list from a vector of string.
 		 *
 		 * @param personIdentities the vector of person identities
-		 * @param elementDiff a KeyValueList listing each person identity
-		 * element asthe KEY and the corresponding elementDifferentiation name
-		 * as the VALUE.
-		 * <p>Example : new KeyValueList().add(new KeyValue(
-		 * PersonListGenerator.IdentityElement.NAME.name(),
+		 * @param elementDiff a KeyValueList listing each person identity element asthe KEY and the corresponding
+		 * elementDifferentiation name as the VALUE.
+		 * <p>
+		 * Example : new KeyValueList().add(new KeyValue( PersonListGenerator.IdentityElement.NAME.name(),
 		 * PersonListGenerator.ElementDifferentiation.IN_UPPER_CASE.name()));
-		 * </p><p>KEY = PersonListGenerator.IdentityElement.[...].name()<br/>
+		 * </p><p>
+		 * KEY = PersonListGenerator.IdentityElement.[...].name()<br/>
 		 * VALUE = PersonListGenerator.ElementDifferentiation.[...].name()</p>
 		 * @param separator the separator between each identity element
 		 * @return the person list from a vector of string
@@ -189,12 +190,14 @@ public class Person
 			List<String> personIdentities,
 			KeyValueList elementDiff, String separator)
 		{
-			List<Person> personList = new ArrayList<Person>();
+			List<Person> personList = new ArrayList<>();
+			Log.warn(personIdentities + "");
 			Person p;
 			for (String s : personIdentities)
 			{
-				p = personFromIdentitiesAndElementDiff(s,
-					elementDiff, separator);
+				if (s.isEmpty()) continue;
+				p = personFromIdentitiesAndElementDiff(s, elementDiff, separator);
+				Log.info(p.toString());
 				personList.add(p);
 //                if (s.contains(".")) Log.debug("toPersonList : (s : " + s + ")" +
 //                    ", (elementDiff : " + elementDiff + "), (separator : " +
@@ -214,7 +217,7 @@ public class Person
 		public static List<String> toStringList(List<Person> persons,
 			List<IdentityElement> idOrder)
 		{
-			List<String> pl = new ArrayList<String>();
+			List<String> pl = new ArrayList<>();
 			String cs = "";
 			for (Person p : persons)
 			{
@@ -248,22 +251,18 @@ public class Person
 				treated = false;
 				for (KeyValue kv : elementDiff)
 				{
-					if (isInGoodCase(cs, getElementDifferentiationByName(
-						kv.getValue())))
+					if (isInGoodCase(cs, getElementDifferentiationByName(kv.getValue())))
 					{
-						IdentityElement cie = getIdentityElementByName(
-							kv.getKey());
+						IdentityElement cie = getIdentityElementByName(kv.getKey());
 						switch (cie)
 						{
 							case NAME:
-								if (name.length() > 1 && sep.equals(" "))
-									name += " ";
+								if (name.length() > 1 && sep.equals(" ")) name += " ";
 								name += cs;
 								treated = true;
 								break;
 							case FORENAME:
-								if (forename.length() > 1 && sep.equals(" "))
-									forename += " ";
+								if (forename.length() > 1 && sep.equals(" ")) forename += " ";
 								forename += cs;
 								treated = true;
 								break;
@@ -273,6 +272,7 @@ public class Person
 				}
 			}
 			if (name.length() < 1 && forename.length() < 1) name = identities;
+			Log.info("Separator : '" + sep + "', name : '" + name + "', forename : '" + forename + "'");
 			return new Person(name, forename);
 		}
 
@@ -333,6 +333,7 @@ public class Person
 				if (e.name().equals(name)) return e;
 			return ElementDifferentiation.FIRST_UPPER_CASE_ONLY;
 		}
+
 	}
 
 	public static class PersonListManager
@@ -341,17 +342,19 @@ public class Person
 		{
 			// TODO to externalize
 		}
-		
+
 		public static List<Person> sortList(List<Person> vp)
 		{
 			List<String> vs = new ArrayList<String>();
 			for (Person p : vp)
-				vs.add((p.getName() + ":" + p.getForename()).trim());
+				vs.add((p.getName() + " " + p.getForename()).trim());
 			Collections.sort(vs);
 			KeyValueList elementDiff = new KeyValueList();
 			elementDiff.add(PersonListGenerator.getDefaultNameElementDiff());
 			elementDiff.add(PersonListGenerator.getDefaultForenameElementDiff());
-			return PersonListGenerator.toPersonList(vs, elementDiff, ":");
+			return PersonListGenerator.toPersonList(vs, elementDiff, " ");
 		}
+
 	}
+
 }

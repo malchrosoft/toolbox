@@ -18,12 +18,12 @@ public class TextManager
 {
 	public enum Separator
 	{
-		SEMICOLON(';'),
-		DOT('.'),
-		COMMA(','),
 		PIPE('|'),
+		SEMICOLON(';'),
+		COMMA(','),
 		SLASH('/'),
 		NEW_LINE('\n'),
+		DOT('.'),
 		SPACE(' ');
 		//
 		private char value;
@@ -104,7 +104,7 @@ public class TextManager
 	{
 		if (this.string == null) return null;
 		List<String> v;
-		for (Separator sep : EnumSet.complementOf(EnumSet.of(Separator.SPACE)))
+		for (Separator sep : EnumSet.complementOf(EnumSet.of(Separator.SPACE, Separator.DOT)))
 		{
 			v = this.toList(sep);
 			if (v.size() > 1) return v;
