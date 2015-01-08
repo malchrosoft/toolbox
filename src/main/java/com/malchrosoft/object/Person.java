@@ -5,7 +5,6 @@
  */
 package com.malchrosoft.object;
 
-import com.malchrosoft.debug.Log;
 import com.malchrosoft.utils.list.KeyValue;
 import com.malchrosoft.utils.list.KeyValueList;
 import java.util.*;
@@ -191,13 +190,11 @@ public class Person
 			KeyValueList elementDiff, String separator)
 		{
 			List<Person> personList = new ArrayList<>();
-			Log.warn(personIdentities + "");
 			Person p;
 			for (String s : personIdentities)
 			{
 				if (s.isEmpty()) continue;
 				p = personFromIdentitiesAndElementDiff(s, elementDiff, separator);
-				Log.info(p.toString());
 				personList.add(p);
 //                if (s.contains(".")) Log.debug("toPersonList : (s : " + s + ")" +
 //                    ", (elementDiff : " + elementDiff + "), (separator : " +
@@ -272,7 +269,6 @@ public class Person
 				}
 			}
 			if (name.length() < 1 && forename.length() < 1) name = identities;
-			Log.info("Separator : '" + sep + "', name : '" + name + "', forename : '" + forename + "'");
 			return new Person(name, forename);
 		}
 
