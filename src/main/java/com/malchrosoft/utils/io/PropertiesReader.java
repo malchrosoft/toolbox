@@ -69,7 +69,7 @@ public class PropertiesReader
      * @param propertiesStartFileName
      * @param extention
      */
-    protected PropertiesReader(String propertiesStartFileName, String extention)
+	protected PropertiesReader(String propertiesStartFileName, String extention)
     {
         this.extention = extention;
         this.loadPropertiesFile(propertiesStartFileName + "." + extention);
@@ -85,7 +85,7 @@ public class PropertiesReader
         this.loadPropertiesFile(filePath);
     }
     
-    protected void loadPropertiesFile(String fileName)
+	protected final void loadPropertiesFile(String fileName)
     {
         this.properties = new Properties();
         this.setFileName(fileName);
@@ -96,12 +96,12 @@ public class PropertiesReader
             this.properties.load(new FileInputStream(this.getFileName()));
         } 
         catch (FileNotFoundException ex)
-        {
-            ex.printStackTrace();
+		{
+			Log.error("File not found : " + this.getFileName(), ex);
         } 
         catch (IOException ex)
         {
-            ex.printStackTrace();
+			Log.error(ex);
         } 
     }
 
