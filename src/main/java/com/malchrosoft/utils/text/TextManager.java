@@ -5,6 +5,7 @@
 package com.malchrosoft.utils.text;
 
 import com.malchrosoft.utils.text.TextManager.Separator;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.EnumSet;
 import java.util.List;
@@ -84,13 +85,19 @@ public class TextManager
 	}
 
 	/**
-	 * @param sep
-	 * @return the list of string : 1 element / line dilimited by the separator.
+	 * @param seps
+	 * @return the list of string : 1 element / line delimited by the separator.
 	 */
-	public List<String> toList(Separator sep)
+	public List<String> toList(Separator... seps)
 	{
 		if (this.string == null) return null;
-		return Arrays.asList(this.string.split(sep.getRegex()));
+		List<String> v = new ArrayList<>();
+		for (Separator sep : seps)
+		{
+			v = this.toList(sep);
+			if (v.size() > 1) return v;
+		}
+		return v;
 	}
 
 	/**
