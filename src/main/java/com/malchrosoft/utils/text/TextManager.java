@@ -88,16 +88,26 @@ public class TextManager
 	 * @param seps
 	 * @return the list of string : 1 element / line delimited by the separator.
 	 */
-	public List<String> toList(Separator... seps)
+	public List<String> toListMulti(Separator... seps)
 	{
 		if (this.string == null) return null;
 		List<String> v = new ArrayList<>();
 		for (Separator sep : seps)
 		{
-			v = this.toList(sep);
+			v = Arrays.asList(this.string.split(sep.getRegex()));
 			if (v.size() > 1) return v;
 		}
 		return v;
+	}
+
+	/**
+	 * @param sep
+	 * @return the list of string : 1 element / line delimited by the separator.
+	 */
+	public List<String> toList(Separator sep)
+	{
+		if (this.string == null) return null;
+		return Arrays.asList(this.string.split(sep.getRegex()));
 	}
 
 	/**
